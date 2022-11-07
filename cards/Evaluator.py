@@ -1,3 +1,4 @@
+from collections import Counter
 from enum import Enum
 from typing import List
 
@@ -56,6 +57,10 @@ class EvaluatorOf5Cards:
         return self.is_straight_flush() and (
             [10, 11, 12, 13, 14] == sorted(list(set(c.number.value for c in self.original_cards)))
         )
+
+    def is_four_of_a_kind(self) -> bool:
+        c = Counter([c.number.value for c in self.original_cards])
+        return c.most_common(1)[0][1] == 4
 
 
 class EvaluatorOf7Cards:
