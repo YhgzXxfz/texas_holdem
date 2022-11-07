@@ -1,14 +1,14 @@
 import unittest
 
 from cards.Card import Card, CardNumber, Genre
-from cards.Evaluator import Evaluator
+from cards.Evaluator import EvaluatorOf7Cards
 
 
-class TestEvaluation(unittest.TestCase):
+class TestEvaluationOf7Cards(unittest.TestCase):
     def setUp(self) -> None:
         return super().setUp()
 
-    def test_is_flush(self):
+    def test_has_flush(self):
         # Not a flush
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -19,7 +19,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.NINE),
             Card(Genre.DIAMOND, CardNumber.ACE),
         ]
-        self.assertFalse(Evaluator.is_flush(stack))
+        self.assertFalse(EvaluatorOf7Cards.has_flush(stack))
 
         # Five of a genre
         stack = [
@@ -31,7 +31,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.NINE),
             Card(Genre.DIAMOND, CardNumber.ACE),
         ]
-        self.assertTrue(Evaluator.is_flush(stack))
+        self.assertTrue(EvaluatorOf7Cards.has_flush(stack))
 
         # More than 5 of a genre
         stack = [
@@ -43,9 +43,9 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertTrue(Evaluator.is_flush(stack))
+        self.assertTrue(EvaluatorOf7Cards.has_flush(stack))
 
-    def test_is_straight(self):
+    def test_has_straight(self):
         # 2, 3, 4, 5, 6
         stack = [
             Card(Genre.CLUB, CardNumber.TWO),
@@ -56,7 +56,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertTrue(Evaluator.is_straight(stack))
+        self.assertTrue(EvaluatorOf7Cards.has_straight(stack))
 
         # 10, J, Q, K, A
         stack = [
@@ -68,7 +68,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertTrue(Evaluator.is_straight(stack))
+        self.assertTrue(EvaluatorOf7Cards.has_straight(stack))
 
         # 1, 2, 3, 4, 5
         stack = [
@@ -80,7 +80,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertTrue(Evaluator.is_straight(stack))
+        self.assertTrue(EvaluatorOf7Cards.has_straight(stack))
 
         # Less than 5 distinct numbers
         stack = [
@@ -92,7 +92,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.HEART, CardNumber.KING),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertFalse(Evaluator.is_straight(stack))
+        self.assertFalse(EvaluatorOf7Cards.has_straight(stack))
 
         # J, Q, K, A, 2 is not a straight
         stack = [
@@ -104,7 +104,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertFalse(Evaluator.is_straight(stack))
+        self.assertFalse(EvaluatorOf7Cards.has_straight(stack))
 
         # No straight
         stack = [
@@ -116,9 +116,9 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertFalse(Evaluator.is_straight(stack))
+        self.assertFalse(EvaluatorOf7Cards.has_straight(stack))
 
-    def test_is_four_of_kind(self):
+    def test_has_four_of_kind(self):
         stack = [
             Card(Genre.CLUB, CardNumber.THREE),
             Card(Genre.HEART, CardNumber.THREE),
@@ -128,7 +128,7 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertTrue(Evaluator.is_four_of_kind(stack))
+        self.assertTrue(EvaluatorOf7Cards.has_four_of_kind(stack))
 
         stack = [
             Card(Genre.CLUB, CardNumber.THREE),
@@ -139,4 +139,4 @@ class TestEvaluation(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.NINE),
             Card(Genre.CLUB, CardNumber.ACE),
         ]
-        self.assertFalse(Evaluator.is_four_of_kind(stack))
+        self.assertFalse(EvaluatorOf7Cards.has_four_of_kind(stack))

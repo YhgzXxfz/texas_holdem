@@ -24,7 +24,7 @@ class Evaluation(Enum):
         return NotImplemented
 
 
-class Evaluator:
+class EvaluatorOf7Cards:
     def __init__(self, cards: List[Card]):
         assert len(cards) == NUMBER_OF_CARDS, f"Must be {NUMBER_OF_CARDS}"
         self.original_cards = cards
@@ -33,7 +33,7 @@ class Evaluator:
         pass
 
     @staticmethod
-    def is_flush(cards: List[Card]) -> bool:
+    def has_flush(cards: List[Card]) -> bool:
         groups = {}
         for card in cards:
             lst = groups.get(card.genre, [])
@@ -43,7 +43,7 @@ class Evaluator:
         return any(len(val) >= 5 for _, val in groups.items())
 
     @staticmethod
-    def is_straight(cards: List[Card]) -> bool:
+    def has_straight(cards: List[Card]) -> bool:
         numbers = sorted(list(set(c.number.value for c in cards)))
         n = len(numbers)
         if n < 5:
@@ -67,7 +67,7 @@ class Evaluator:
         return False
 
     @staticmethod
-    def is_four_of_kind(cards: List[Card]) -> bool:
+    def has_four_of_kind(cards: List[Card]) -> bool:
         groups = {}
         for card in cards:
             lst = groups.get(card.number, [])
