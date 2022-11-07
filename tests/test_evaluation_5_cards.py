@@ -61,3 +61,69 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertTrue(e.is_straight())
+
+    def test_is_straight_flush(self):
+        # staight but not flush
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_straight_flush())
+
+        # flush but not straight
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_straight_flush())
+
+        # straight flush
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_straight_flush())
+
+    def test_is_royal_straight_flush(self):
+        # royal straight flush
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_royal_straight_flush())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_royal_straight_flush())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.THREE),
+            Card(Genre.DIAMOND, CardNumber.FOUR),
+            Card(Genre.DIAMOND, CardNumber.FIVE),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_royal_straight_flush())

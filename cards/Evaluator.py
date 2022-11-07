@@ -49,6 +49,14 @@ class EvaluatorOf5Cards:
             and numbers[4] == 14  # 2345A
         )
 
+    def is_straight_flush(self) -> bool:
+        return self.is_flush() and self.is_straight()
+
+    def is_royal_straight_flush(self) -> bool:
+        return self.is_straight_flush() and (
+            [10, 11, 12, 13, 14] == sorted(list(set(c.number.value for c in self.original_cards)))
+        )
+
 
 class EvaluatorOf7Cards:
     def __init__(self, cards: List[Card]):
