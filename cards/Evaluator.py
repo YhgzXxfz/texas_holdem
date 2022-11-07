@@ -62,6 +62,11 @@ class EvaluatorOf5Cards:
         c = Counter([c.number.value for c in self.original_cards])
         return c.most_common(1)[0][1] == 4
 
+    def is_full_house(self) -> bool:
+        c = Counter([c.number.value for c in self.original_cards])
+        most_two_common_numbers = c.most_common(2)
+        return most_two_common_numbers[0][1] == 3 and most_two_common_numbers[1][1] == 2
+
 
 class EvaluatorOf7Cards:
     def __init__(self, cards: List[Card]):
