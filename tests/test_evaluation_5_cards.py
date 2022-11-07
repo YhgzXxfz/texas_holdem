@@ -230,3 +230,44 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertFalse(e.is_three_of_a_kind())
+
+    def test_is_two_pairs(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_two_pairs())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_two_pairs())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_two_pairs())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_two_pairs())

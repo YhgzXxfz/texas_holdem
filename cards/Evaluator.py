@@ -67,6 +67,9 @@ class EvaluatorOf5Cards:
     def is_three_of_a_kind(self) -> bool:
         return self._group_by_numbers() == [3, 1, 1]
 
+    def is_two_pairs(self) -> bool:
+        return self._group_by_numbers() == [2, 2, 1]
+
     def _group_by_numbers(self) -> List[int]:
         c = Counter([c.number.value for c in self.original_cards])
         return [t[1] for t in c.most_common()]
