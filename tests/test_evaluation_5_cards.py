@@ -189,3 +189,44 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertTrue(e.is_full_house())
+
+    def test_is_three_of_a_kind(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_three_of_a_kind())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_three_of_a_kind())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_three_of_a_kind())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_three_of_a_kind())

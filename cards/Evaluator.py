@@ -59,13 +59,17 @@ class EvaluatorOf5Cards:
         )
 
     def is_four_of_a_kind(self) -> bool:
-        c = Counter([c.number.value for c in self.original_cards])
-        return c.most_common(1)[0][1] == 4
+        return self._group_by_numbers() == [4, 1]
 
     def is_full_house(self) -> bool:
+        return self._group_by_numbers() == [3, 2]
+
+    def is_three_of_a_kind(self) -> bool:
+        return self._group_by_numbers() == [3, 1, 1]
+
+    def _group_by_numbers(self) -> List[int]:
         c = Counter([c.number.value for c in self.original_cards])
-        most_two_common_numbers = c.most_common(2)
-        return most_two_common_numbers[0][1] == 3 and most_two_common_numbers[1][1] == 2
+        return [t[1] for t in c.most_common()]
 
 
 class EvaluatorOf7Cards:
