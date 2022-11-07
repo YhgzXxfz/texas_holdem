@@ -29,3 +29,35 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertTrue(e.is_flush())
+
+    def test_is_straight(self):
+        # Not a straight
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.HEART, CardNumber.EIGHT),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_straight())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_straight())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.THREE),
+            Card(Genre.HEART, CardNumber.FOUR),
+            Card(Genre.CLUB, CardNumber.FIVE),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_straight())

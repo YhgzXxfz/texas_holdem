@@ -37,6 +37,18 @@ class EvaluatorOf5Cards:
         genre = self.original_cards[0].genre
         return all(c.genre == genre for c in self.original_cards)
 
+    def is_straight(self) -> bool:
+        numbers = sorted(list(set(c.number.value for c in self.original_cards)))
+        n = len(numbers)
+        if n < 5:
+            return False
+
+        return all(numbers[i + 1] - numbers[i] == 1 for i in range(n - 1)) or (  # ascending by 1
+            all(numbers[i + 1] - numbers[i] == 1 for i in range(n - 2))
+            and numbers[0] == 2
+            and numbers[4] == 14  # 2345A
+        )
+
 
 class EvaluatorOf7Cards:
     def __init__(self, cards: List[Card]):
