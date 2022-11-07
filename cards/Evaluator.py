@@ -24,6 +24,20 @@ class Evaluation(Enum):
         return NotImplemented
 
 
+class EvaluatorOf5Cards:
+    def __init__(self, cards: List[Card]):
+        self.card_number = 5
+        assert len(cards) == self.card_number, f"Must be {self.card_number} cards"
+        self.original_cards = cards
+
+    def getOptimalCards(self):
+        pass
+
+    def is_flush(self) -> bool:
+        genre = self.original_cards[0].genre
+        return all(c.genre == genre for c in self.original_cards)
+
+
 class EvaluatorOf7Cards:
     def __init__(self, cards: List[Card]):
         assert len(cards) == NUMBER_OF_CARDS, f"Must be {NUMBER_OF_CARDS}"
