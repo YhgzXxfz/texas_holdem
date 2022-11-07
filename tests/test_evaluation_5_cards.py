@@ -271,3 +271,54 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertTrue(e.is_two_pairs())
+
+    def test_is_one_pair(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_one_pair())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_one_pair())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_one_pair())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertFalse(e.is_one_pair())
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertTrue(e.is_one_pair())
