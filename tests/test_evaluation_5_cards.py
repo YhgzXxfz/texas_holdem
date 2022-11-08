@@ -1,7 +1,7 @@
 import unittest
 
 from cards.Card import Card, CardNumber, Genre
-from cards.Evaluator import EvaluatorOf5Cards
+from evaluations.EvaluatorOf5Cards import EvaluatorOf5Cards
 
 
 class TestEvaluationOf7Cards(unittest.TestCase):
