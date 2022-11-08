@@ -3,6 +3,8 @@ from typing import List
 
 from cards.Card import Card
 
+from evaluations.Evaluation import Evaluation
+
 
 class EvaluatorOf5Cards:
     def __init__(self, cards: List[Card]):
@@ -10,8 +12,27 @@ class EvaluatorOf5Cards:
         assert len(cards) == self.card_number, f"Must be {self.card_number} cards"
         self.original_cards = cards
 
-    def getOptimalCards(self):
-        pass
+    def getOptimalCards(self) -> Evaluation:
+        if self.is_royal_straight_flush():
+            return Evaluation.ROYAL_STRAIGHT_FLUSH
+        elif self.is_straight_flush():
+            return Evaluation.STRAIGHT_FLUSH
+        elif self.is_four_of_a_kind():
+            return Evaluation.FOUR_OF_A_KIND
+        elif self.is_full_house():
+            return Evaluation.FULL_HOUSE
+        elif self.is_flush():
+            return Evaluation.FLUSH
+        elif self.is_straight():
+            return Evaluation.STRAIGHT
+        elif self.is_three_of_a_kind():
+            return Evaluation.THREE_OF_A_KIND
+        elif self.is_two_pairs():
+            return Evaluation.TWO_PAIRS
+        elif self.is_one_pair():
+            return Evaluation.ONE_PAIR
+        else:
+            return Evaluation.HIGH_CARD
 
     def is_flush(self) -> bool:
         genre = self.original_cards[0].genre

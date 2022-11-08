@@ -1,6 +1,7 @@
 import unittest
 
 from cards.Card import Card, CardNumber, Genre
+from evaluations.Evaluation import Evaluation
 from evaluations.EvaluatorOf5Cards import EvaluatorOf5Cards
 
 
@@ -322,3 +323,104 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertTrue(e.is_one_pair())
+
+    def test_evaluation(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.ROYAL_STRAIGHT_FLUSH)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.FULL_HOUSE)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.EIGHT),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.FLUSH)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.THREE),
+            Card(Genre.HEART, CardNumber.FOUR),
+            Card(Genre.CLUB, CardNumber.FIVE),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.STRAIGHT)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.TWO_PAIRS)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.ONE_PAIR)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        e = EvaluatorOf5Cards(stack)
+        self.assertEqual(e.getOptimalCards(), Evaluation.HIGH_CARD)
