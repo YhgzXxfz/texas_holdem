@@ -13,7 +13,7 @@ class EvaluatorOf5Cards:
         assert len(set(cards)) == self.card_number, f"Must be {self.card_number} cards"
         self.original_cards = cards
 
-    def getOptimalCards(self) -> Evaluation:
+    def getEvaluation(self) -> Evaluation:
         if self.is_royal_straight_flush():
             return Evaluation.ROYAL_STRAIGHT_FLUSH
         elif self.is_straight_flush():
@@ -81,7 +81,7 @@ class EvaluatorOf5Cards:
     def __lt__(self, o: object) -> bool:
         if self.__class__ is not o.__class__:
             return NotImplemented
-        s_eval, o_eval = self.getOptimalCards(), o.getOptimalCards()
+        s_eval, o_eval = self.getEvaluation(), o.getEvaluation()
         if s_eval < o_eval:
             return True
         elif s_eval > o_eval:
@@ -101,3 +101,6 @@ class EvaluatorOf5Cards:
                 return sort_by_occurence_lt(self.original_cards, o.original_cards)
             else:
                 return straight_lt(self.original_cards, o.original_cards)
+
+    def __eq__(self, o: object) -> bool:
+        return not self < o and not o < self
