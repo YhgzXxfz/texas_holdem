@@ -704,3 +704,48 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(tripes_QQQJ6.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
         self.assertEqual(tripes_QQQA5.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
         self.assertLess(tripes_QQQJ6, tripes_QQQA5)
+
+    def test_comparisons_when_evaluations_are_full_houses(self):
+        # tripes dominate
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        full_house_QQQJJ = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.ACE),
+        ]
+        full_house_TTTAA = EvaluatorOf5Cards(stack)
+        self.assertEqual(full_house_QQQJJ.getOptimalCards(), Evaluation.FULL_HOUSE)
+        self.assertEqual(full_house_TTTAA.getOptimalCards(), Evaluation.FULL_HOUSE)
+        self.assertLess(full_house_TTTAA, full_house_QQQJJ)
+
+        # tripes are equal, pairs dominate
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.ACE),
+        ]
+        full_house_TTTAA = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.KING),
+        ]
+        full_house_TTTKK = EvaluatorOf5Cards(stack)
+        self.assertEqual(full_house_TTTAA.getOptimalCards(), Evaluation.FULL_HOUSE)
+        self.assertEqual(full_house_TTTKK.getOptimalCards(), Evaluation.FULL_HOUSE)
+        self.assertLess(full_house_TTTKK, full_house_TTTAA)
