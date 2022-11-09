@@ -3,6 +3,7 @@ from typing import List
 
 from cards.Card import Card
 
+from evaluations.Comparisons import high_card_lt
 from evaluations.Evaluation import Evaluation
 
 
@@ -87,4 +88,7 @@ class EvaluatorOf5Cards:
             return False
         else:
             # TODO: Compare two 5 card hands when they are of the same kind
+            if s_eval == Evaluation.HIGH_CARD:
+                return high_card_lt(self.original_cards, o.original_cards)
+
             return False

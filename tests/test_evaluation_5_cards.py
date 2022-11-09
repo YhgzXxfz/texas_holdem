@@ -525,3 +525,25 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertLess(full_house, four_of_a_kind)
         self.assertLess(four_of_a_kind, straight_flush)
         self.assertLess(straight_flush, royal_straight_flush)
+
+    def test_comparisons_when_evaluations_are_high_cards(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.SIX),
+        ]
+        high_card_AQJ62 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        high_card_AQT92 = EvaluatorOf5Cards(stack)
+        self.assertEqual(high_card_AQJ62.getOptimalCards(), Evaluation.HIGH_CARD)
+        self.assertEqual(high_card_AQT92.getOptimalCards(), Evaluation.HIGH_CARD)
+        self.assertLess(high_card_AQT92, high_card_AQJ62)
