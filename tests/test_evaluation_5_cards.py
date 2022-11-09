@@ -839,3 +839,25 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(straight_23456.getOptimalCards(), Evaluation.STRAIGHT)
         self.assertEqual(straight_A2345.getOptimalCards(), Evaluation.STRAIGHT)
         self.assertLess(straight_A2345, straight_23456)
+
+    def test_comparisons_when_evaluations_are_flush(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+        ]
+        flush_KQT92 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.THREE),
+            Card(Genre.DIAMOND, CardNumber.FOUR),
+            Card(Genre.DIAMOND, CardNumber.FIVE),
+            Card(Genre.DIAMOND, CardNumber.SIX),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+        ]
+        flush_A6543 = EvaluatorOf5Cards(stack)
+        self.assertEqual(flush_A6543.getOptimalCards(), Evaluation.FLUSH)
+        self.assertEqual(flush_KQT92.getOptimalCards(), Evaluation.FLUSH)
+        self.assertLess(flush_KQT92, flush_A6543)

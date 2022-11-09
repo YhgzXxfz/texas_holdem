@@ -88,7 +88,7 @@ class EvaluatorOf5Cards:
             return False
         else:
             # TODO: Compare two 5 card hands when they are of the same kind
-            if s_eval in set([Evaluation.HIGH_CARD]):
+            if s_eval in set([Evaluation.HIGH_CARD, Evaluation.FLUSH]):
                 return sort_by_number_lt(self.original_cards, o.original_cards)
             elif s_eval in set(
                 [
