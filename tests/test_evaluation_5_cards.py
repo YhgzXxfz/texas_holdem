@@ -794,3 +794,48 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(quads_QQQQJ.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
         self.assertEqual(quads_QQQQ7.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
         self.assertLess(quads_QQQQ7, quads_QQQQJ)
+
+    def test_comparisons_when_evaluations_are_straights(self):
+        # 9TJQK < TJQKA
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.NINE),
+        ]
+        straight_9TJQK = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.ACE),
+        ]
+        straight_TJQKA = EvaluatorOf5Cards(stack)
+        self.assertEqual(straight_9TJQK.getOptimalCards(), Evaluation.STRAIGHT)
+        self.assertEqual(straight_TJQKA.getOptimalCards(), Evaluation.STRAIGHT)
+        self.assertLess(straight_9TJQK, straight_TJQKA)
+
+        # A2345 < 23456
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.THREE),
+            Card(Genre.SPADE, CardNumber.FOUR),
+            Card(Genre.HEART, CardNumber.FIVE),
+            Card(Genre.CLUB, CardNumber.SIX),
+        ]
+        straight_23456 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.THREE),
+            Card(Genre.SPADE, CardNumber.FOUR),
+            Card(Genre.HEART, CardNumber.FIVE),
+            Card(Genre.CLUB, CardNumber.ACE),
+        ]
+        straight_A2345 = EvaluatorOf5Cards(stack)
+        self.assertEqual(straight_23456.getOptimalCards(), Evaluation.STRAIGHT)
+        self.assertEqual(straight_A2345.getOptimalCards(), Evaluation.STRAIGHT)
+        self.assertLess(straight_A2345, straight_23456)
