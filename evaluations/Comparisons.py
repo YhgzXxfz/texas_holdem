@@ -8,11 +8,8 @@ def high_card_lt(s: List[Card], o: List[Card]) -> bool:
     return _high_card_lt(sorted([c.number for c in s], reverse=True), sorted([c.number for c in o], reverse=True))
 
 
-def one_pair_lt(s: List[Card], o: List[Card]) -> bool:
+def group_by_occurence_lt(s: List[Card], o: List[Card]) -> bool:
     s_c, o_c = _group_and_sort_by_occurence(s), _group_and_sort_by_occurence(o)
-
-    # assert [t[1] for t in s_c] == [2, 1, 1, 1]
-    # assert [t[1] for t in o_c] == [2, 1, 1, 1]
 
     return _high_card_lt([t[0] for t in s_c], [t[0] for t in o_c])
 

@@ -549,6 +549,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertLess(high_card_AQT92, high_card_AQJ62)
 
     def test_comparisons_when_evaluations_are_one_pair(self):
+        # pair dominates
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
             Card(Genre.SPADE, CardNumber.TWO),
@@ -570,6 +571,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(one_pair_QQAT2.getOptimalCards(), Evaluation.ONE_PAIR)
         self.assertLess(one_pair_JJAQ2, one_pair_QQAT2)
 
+        # pairs are equal, high card dominates
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
             Card(Genre.SPADE, CardNumber.TWO),
@@ -590,3 +592,70 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(one_pair_JJAQ2.getOptimalCards(), Evaluation.ONE_PAIR)
         self.assertEqual(one_pair_JJAT2.getOptimalCards(), Evaluation.ONE_PAIR)
         self.assertLess(one_pair_JJAT2, one_pair_JJAQ2)
+
+    def test_comparisons_when_evaluations_are_two_pairs(self):
+        # bigger pair dominates
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        two_pairs_QQJJA = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TWO),
+        ]
+        two_pairs_AA22Q = EvaluatorOf5Cards(stack)
+        self.assertEqual(two_pairs_QQJJA.getOptimalCards(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_AA22Q.getOptimalCards(), Evaluation.TWO_PAIRS)
+        self.assertLess(two_pairs_QQJJA, two_pairs_AA22Q)
+
+        # bigger pairs are equal, second pair dominates
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        two_pairs_JJTTK = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.SPADE, CardNumber.SIX),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.SIX),
+        ]
+        two_pairs_JJ66A = EvaluatorOf5Cards(stack)
+        self.assertEqual(two_pairs_JJTTK.getOptimalCards(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_JJ66A.getOptimalCards(), Evaluation.TWO_PAIRS)
+        self.assertLess(two_pairs_JJ66A, two_pairs_JJTTK)
+
+        # pairs are equal, high card dominates
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.TEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        two_pairs_JJTTK = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.SPADE, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        two_pairs_JJTTA = EvaluatorOf5Cards(stack)
+        self.assertEqual(two_pairs_JJTTK.getOptimalCards(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_JJTTA.getOptimalCards(), Evaluation.TWO_PAIRS)
+        self.assertLess(two_pairs_JJTTK, two_pairs_JJTTA)
