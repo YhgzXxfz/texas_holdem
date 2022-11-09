@@ -5,7 +5,7 @@ from evaluations.Evaluation import Evaluation
 from evaluations.EvaluatorOf5Cards import EvaluatorOf5Cards
 
 
-class TestEvaluationOf7Cards(unittest.TestCase):
+class TestEvaluationOf5Cards(unittest.TestCase):
     def setUp(self) -> None:
         return super().setUp()
 
