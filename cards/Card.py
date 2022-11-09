@@ -41,3 +41,11 @@ class Card:
 
     def __str__(self) -> str:
         return f"{self.genre} {self.number}"
+
+    def __eq__(self, o: object) -> bool:
+        if self.__class__ is o.__class__:
+            return self.genre == o.genre and self.number == o.number
+        return NotImplemented
+
+    def __hash__(self) -> int:
+        return hash((self.genre, self.number))

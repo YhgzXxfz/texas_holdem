@@ -7,7 +7,7 @@ NUMBER_OF_CARDS = 7
 
 class EvaluatorOf7Cards:
     def __init__(self, cards: List[Card]):
-        assert len(cards) == NUMBER_OF_CARDS, f"Must be {NUMBER_OF_CARDS}"
+        assert len(set(cards)) == NUMBER_OF_CARDS, f"Must be {NUMBER_OF_CARDS}"
         self.original_cards = cards
 
     def getOptimalCards(self):

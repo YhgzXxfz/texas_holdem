@@ -9,7 +9,7 @@ from evaluations.Evaluation import Evaluation
 class EvaluatorOf5Cards:
     def __init__(self, cards: List[Card]):
         self.card_number = 5
-        assert len(cards) == self.card_number, f"Must be {self.card_number} cards"
+        assert len(set(cards)) == self.card_number, f"Must be {self.card_number} cards"
         self.original_cards = cards
 
     def getOptimalCards(self) -> Evaluation:
