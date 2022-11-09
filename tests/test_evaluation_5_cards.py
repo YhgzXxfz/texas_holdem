@@ -749,3 +749,48 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(full_house_TTTAA.getOptimalCards(), Evaluation.FULL_HOUSE)
         self.assertEqual(full_house_TTTKK.getOptimalCards(), Evaluation.FULL_HOUSE)
         self.assertLess(full_house_TTTKK, full_house_TTTAA)
+
+    def test_comparisons_when_evaluations_are_four_of_a_kind(self):
+        # quads dominate
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+        ]
+        quads_QQQQJ = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.SEVEN),
+            Card(Genre.HEART, CardNumber.KING),
+            Card(Genre.CLUB, CardNumber.KING),
+        ]
+        quads_KKKK7 = EvaluatorOf5Cards(stack)
+        self.assertEqual(quads_QQQQJ.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(quads_KKKK7.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
+        self.assertLess(quads_QQQQJ, quads_KKKK7)
+
+        # quads are equal, high card dominates
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+        ]
+        quads_QQQQJ = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.SEVEN),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+        ]
+        quads_QQQQ7 = EvaluatorOf5Cards(stack)
+        self.assertEqual(quads_QQQQJ.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(quads_QQQQ7.getOptimalCards(), Evaluation.FOUR_OF_A_KIND)
+        self.assertLess(quads_QQQQ7, quads_QQQQJ)

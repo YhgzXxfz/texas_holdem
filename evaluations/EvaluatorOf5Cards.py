@@ -91,7 +91,13 @@ class EvaluatorOf5Cards:
             if s_eval == Evaluation.HIGH_CARD:
                 return high_card_lt(self.original_cards, o.original_cards)
             elif s_eval in set(
-                [Evaluation.ONE_PAIR, Evaluation.TWO_PAIRS, Evaluation.THREE_OF_A_KIND, Evaluation.FULL_HOUSE]
+                [
+                    Evaluation.ONE_PAIR,
+                    Evaluation.TWO_PAIRS,
+                    Evaluation.THREE_OF_A_KIND,
+                    Evaluation.FULL_HOUSE,
+                    Evaluation.FOUR_OF_A_KIND,
+                ]
             ):
                 return group_by_occurence_lt(self.original_cards, o.original_cards)
 
