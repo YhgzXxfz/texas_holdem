@@ -906,3 +906,27 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(straight_flush_A2345.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
         self.assertEqual(straight_flush_56789.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
         self.assertLess(straight_flush_A2345, straight_flush_56789)
+
+    def test_comparisons_when_evaluations_are_royal_straight_flush(self):
+        # Royal straight flushes are all equal
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+        ]
+        royal_straight_flush_diamond = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.SPADE, CardNumber.TEN),
+        ]
+        royal_straight_flush_spade = EvaluatorOf5Cards(stack)
+        self.assertEqual(royal_straight_flush_diamond.getOptimalCards(), Evaluation.ROYAL_STRAIGHT_FLUSH)
+        self.assertEqual(royal_straight_flush_spade.getOptimalCards(), Evaluation.ROYAL_STRAIGHT_FLUSH)
+        self.assertFalse(royal_straight_flush_diamond < royal_straight_flush_spade)
+        self.assertFalse(royal_straight_flush_spade < royal_straight_flush_diamond)
