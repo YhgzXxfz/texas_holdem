@@ -861,3 +861,48 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(flush_A6543.getOptimalCards(), Evaluation.FLUSH)
         self.assertEqual(flush_KQT92.getOptimalCards(), Evaluation.FLUSH)
         self.assertLess(flush_KQT92, flush_A6543)
+
+    def test_comparisons_when_evaluations_are_straight_flush(self):
+        # 34566 < 9TJQK
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+        ]
+        straight_flush_9TJQK = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.SPADE, CardNumber.THREE),
+            Card(Genre.SPADE, CardNumber.FOUR),
+            Card(Genre.SPADE, CardNumber.FIVE),
+            Card(Genre.SPADE, CardNumber.SIX),
+            Card(Genre.SPADE, CardNumber.SEVEN),
+        ]
+        straight_flush_34567 = EvaluatorOf5Cards(stack)
+        self.assertEqual(straight_flush_9TJQK.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(straight_flush_34567.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
+        self.assertLess(straight_flush_34567, straight_flush_9TJQK)
+
+        # A2345 < 56789
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.THREE),
+            Card(Genre.DIAMOND, CardNumber.FOUR),
+            Card(Genre.DIAMOND, CardNumber.FIVE),
+        ]
+        straight_flush_A2345 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.SPADE, CardNumber.FIVE),
+            Card(Genre.SPADE, CardNumber.SIX),
+            Card(Genre.SPADE, CardNumber.SEVEN),
+            Card(Genre.SPADE, CardNumber.EIGHT),
+            Card(Genre.SPADE, CardNumber.NINE),
+        ]
+        straight_flush_56789 = EvaluatorOf5Cards(stack)
+        self.assertEqual(straight_flush_A2345.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(straight_flush_56789.getOptimalCards(), Evaluation.STRAIGHT_FLUSH)
+        self.assertLess(straight_flush_A2345, straight_flush_56789)
