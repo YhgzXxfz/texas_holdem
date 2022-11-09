@@ -424,3 +424,104 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         ]
         e = EvaluatorOf5Cards(stack)
         self.assertEqual(e.getOptimalCards(), Evaluation.HIGH_CARD)
+
+    def test_comparison_when_evalutations_are_different(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        royal_straight_flush = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.NINE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.TEN),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        straight_flush = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        four_of_a_kind = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        full_house = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.DIAMOND, CardNumber.ACE),
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.DIAMOND, CardNumber.EIGHT),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+        ]
+        flush = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.THREE),
+            Card(Genre.HEART, CardNumber.FOUR),
+            Card(Genre.CLUB, CardNumber.FIVE),
+        ]
+        straight = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        three_of_a_kind = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        two_pairs = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        one_pair = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.CLUB, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        high_card = EvaluatorOf5Cards(stack)
+
+        self.assertLess(high_card, one_pair)
+        self.assertLess(one_pair, two_pairs)
+        self.assertLess(two_pairs, three_of_a_kind)
+        self.assertLess(three_of_a_kind, straight)
+        self.assertLess(straight, flush)
+        self.assertLess(flush, full_house)
+        self.assertLess(full_house, four_of_a_kind)
+        self.assertLess(four_of_a_kind, straight_flush)
+        self.assertLess(straight_flush, royal_straight_flush)

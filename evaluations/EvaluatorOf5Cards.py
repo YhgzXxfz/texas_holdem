@@ -76,3 +76,15 @@ class EvaluatorOf5Cards:
     def _group_by_numbers(self) -> List[int]:
         c = Counter([c.number.value for c in self.original_cards])
         return [t[1] for t in c.most_common()]
+
+    def __lt__(self, o: object) -> bool:
+        if self.__class__ is not o.__class__:
+            return NotImplemented
+        s_eval, o_eval = self.getOptimalCards(), o.getOptimalCards()
+        if s_eval < o_eval:
+            return True
+        elif s_eval > o_eval:
+            return False
+        else:
+            # TODO: Compare two 5 card hands when they are of the same kind
+            return False
