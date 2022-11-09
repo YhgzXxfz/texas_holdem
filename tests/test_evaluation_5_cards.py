@@ -659,3 +659,48 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(two_pairs_JJTTK.getOptimalCards(), Evaluation.TWO_PAIRS)
         self.assertEqual(two_pairs_JJTTA.getOptimalCards(), Evaluation.TWO_PAIRS)
         self.assertLess(two_pairs_JJTTK, two_pairs_JJTTA)
+
+    def test_comparisons_when_evaluations_are_three_of_a_kind(self):
+        # tripes dominate
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.SIX),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        tripes_QQQJ6 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.KING),
+            Card(Genre.SPADE, CardNumber.SIX),
+            Card(Genre.HEART, CardNumber.KING),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        tripes_KKKJ6 = EvaluatorOf5Cards(stack)
+        self.assertEqual(tripes_QQQJ6.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(tripes_KKKJ6.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
+        self.assertLess(tripes_QQQJ6, tripes_KKKJ6)
+
+        # tripes are equal, high card dominates
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.SIX),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        tripes_QQQJ6 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.FIVE),
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.ACE),
+        ]
+        tripes_QQQA5 = EvaluatorOf5Cards(stack)
+        self.assertEqual(tripes_QQQJ6.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(tripes_QQQA5.getOptimalCards(), Evaluation.THREE_OF_A_KIND)
+        self.assertLess(tripes_QQQJ6, tripes_QQQA5)

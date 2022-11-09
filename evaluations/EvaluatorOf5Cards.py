@@ -90,7 +90,7 @@ class EvaluatorOf5Cards:
             # TODO: Compare two 5 card hands when they are of the same kind
             if s_eval == Evaluation.HIGH_CARD:
                 return high_card_lt(self.original_cards, o.original_cards)
-            elif s_eval in set([Evaluation.ONE_PAIR, Evaluation.TWO_PAIRS]):
+            elif s_eval in set([Evaluation.ONE_PAIR, Evaluation.TWO_PAIRS, Evaluation.THREE_OF_A_KIND]):
                 return group_by_occurence_lt(self.original_cards, o.original_cards)
 
             return False
