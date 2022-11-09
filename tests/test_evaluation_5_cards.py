@@ -547,3 +547,46 @@ class TestEvaluationOf5Cards(unittest.TestCase):
         self.assertEqual(high_card_AQJ62.getOptimalCards(), Evaluation.HIGH_CARD)
         self.assertEqual(high_card_AQT92.getOptimalCards(), Evaluation.HIGH_CARD)
         self.assertLess(high_card_AQT92, high_card_AQJ62)
+
+    def test_comparisons_when_evaluations_are_one_pair(self):
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        one_pair_JJAQ2 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        one_pair_QQAT2 = EvaluatorOf5Cards(stack)
+        self.assertEqual(one_pair_JJAQ2.getOptimalCards(), Evaluation.ONE_PAIR)
+        self.assertEqual(one_pair_QQAT2.getOptimalCards(), Evaluation.ONE_PAIR)
+        self.assertLess(one_pair_JJAQ2, one_pair_QQAT2)
+
+        stack = [
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.SPADE, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.JACK),
+        ]
+        one_pair_JJAQ2 = EvaluatorOf5Cards(stack)
+
+        stack = [
+            Card(Genre.HEART, CardNumber.JACK),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.CLUB, CardNumber.TEN),
+        ]
+        one_pair_JJAT2 = EvaluatorOf5Cards(stack)
+        self.assertEqual(one_pair_JJAQ2.getOptimalCards(), Evaluation.ONE_PAIR)
+        self.assertEqual(one_pair_JJAT2.getOptimalCards(), Evaluation.ONE_PAIR)
+        self.assertLess(one_pair_JJAT2, one_pair_JJAQ2)

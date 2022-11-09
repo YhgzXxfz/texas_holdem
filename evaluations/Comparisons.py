@@ -1,18 +1,30 @@
+from collections import Counter
 from typing import List
 
-from cards.Card import Card
-
-
-def single_card_lt(s: Card, o: Card) -> bool:
-    return s.number < o.number
+from cards.Card import Card, CardNumber
 
 
 def high_card_lt(s: List[Card], o: List[Card]) -> bool:
-    s.sort(key=lambda c: c.number, reverse=True)
-    o.sort(key=lambda c: c.number, reverse=True)
+    return _high_card_lt(sorted([c.number for c in s], reverse=True), sorted([c.number for c in o], reverse=True))
+
+
+def one_pair_lt(s: List[Card], o: List[Card]) -> bool:
+    s_c, o_c = _group_and_sort_by_occurence(s), _group_and_sort_by_occurence(o)
+
+    # assert [t[1] for t in s_c] == [2, 1, 1, 1]
+    # assert [t[1] for t in o_c] == [2, 1, 1, 1]
+
+    return _high_card_lt([t[0] for t in s_c], [t[0] for t in o_c])
+
+
+def _group_and_sort_by_occurence(stack: List[Card]) -> List[tuple[CardNumber, int]]:
+    return sorted(Counter([c.number for c in stack]).most_common(), key=lambda t: (t[1], t[0]), reverse=True)
+
+
+def _high_card_lt(s: List[CardNumber], o: List[CardNumber]) -> bool:
     for s_i, o_i in zip(s, o):
-        if single_card_lt(s_i, o_i):
+        if s_i < o_i:
             return True
-        elif single_card_lt(o_i, s_i):
+        elif o_i < s_i:
             return False
     return False
