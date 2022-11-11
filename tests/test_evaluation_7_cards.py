@@ -11,7 +11,7 @@ class TestEvaluationOf7Cards(unittest.TestCase):
     def setUp(self) -> None:
         return super().setUp()
 
-    def provide_7_card_hands():
+    def _provide_7_card_hands():
         return (
             (
                 Evaluation.FOUR_OF_A_KIND,
@@ -32,9 +32,47 @@ class TestEvaluationOf7Cards(unittest.TestCase):
                     Card(Genre.CLUB, CardNumber.ACE),
                 ],
             ),
+            (
+                Evaluation.STRAIGHT,
+                [
+                    Card(Genre.CLUB, CardNumber.TWO),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.FOUR),
+                    Card(Genre.SPADE, CardNumber.FIVE),
+                    Card(Genre.CLUB, CardNumber.FIVE),
+                    Card(Genre.DIAMOND, CardNumber.FIVE),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                ],
+                [
+                    Card(Genre.CLUB, CardNumber.TWO),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.FOUR),
+                    Card(Genre.SPADE, CardNumber.FIVE),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                ],
+            ),
+            (
+                Evaluation.FLUSH,
+                [
+                    Card(Genre.CLUB, CardNumber.TWO),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.CLUB, CardNumber.FOUR),
+                    Card(Genre.SPADE, CardNumber.FIVE),
+                    Card(Genre.CLUB, CardNumber.TEN),
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                ],
+                [
+                    Card(Genre.CLUB, CardNumber.TWO),
+                    Card(Genre.CLUB, CardNumber.TEN),
+                    Card(Genre.CLUB, CardNumber.FOUR),
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                ],
+            ),
         )
 
-    @data_provider(provide_7_card_hands)
+    @data_provider(_provide_7_card_hands)
     def test_get_optimal_hands(self, evaluation, original_hand, optimal_hand):
         # When
         e = EvaluatorOf7Cards(original_hand)
