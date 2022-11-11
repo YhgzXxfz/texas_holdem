@@ -333,7 +333,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.JACK),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.ROYAL_STRAIGHT_FLUSH)
+        self.assertEqual(e.get_evaluation(), Evaluation.ROYAL_STRAIGHT_FLUSH)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -343,7 +343,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.JACK),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(e.get_evaluation(), Evaluation.STRAIGHT_FLUSH)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -353,7 +353,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.JACK),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(e.get_evaluation(), Evaluation.FOUR_OF_A_KIND)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -363,7 +363,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.JACK),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.FULL_HOUSE)
+        self.assertEqual(e.get_evaluation(), Evaluation.FULL_HOUSE)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -373,7 +373,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.JACK),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.FLUSH)
+        self.assertEqual(e.get_evaluation(), Evaluation.FLUSH)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.TWO),
@@ -383,7 +383,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.FIVE),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.STRAIGHT)
+        self.assertEqual(e.get_evaluation(), Evaluation.STRAIGHT)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -393,7 +393,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(e.get_evaluation(), Evaluation.THREE_OF_A_KIND)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -403,7 +403,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(e.get_evaluation(), Evaluation.TWO_PAIRS)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -413,7 +413,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.ONE_PAIR)
+        self.assertEqual(e.get_evaluation(), Evaluation.ONE_PAIR)
 
         stack = [
             Card(Genre.DIAMOND, CardNumber.QUEEN),
@@ -423,7 +423,7 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         e = EvaluatorOf5Cards(stack)
-        self.assertEqual(e.getEvaluation(), Evaluation.HIGH_CARD)
+        self.assertEqual(e.get_evaluation(), Evaluation.HIGH_CARD)
 
     def test_comparison_when_evalutations_are_different(self):
         stack = [
@@ -544,8 +544,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         high_card_AQT92 = EvaluatorOf5Cards(stack)
-        self.assertEqual(high_card_AQJ62.getEvaluation(), Evaluation.HIGH_CARD)
-        self.assertEqual(high_card_AQT92.getEvaluation(), Evaluation.HIGH_CARD)
+        self.assertEqual(high_card_AQJ62.get_evaluation(), Evaluation.HIGH_CARD)
+        self.assertEqual(high_card_AQT92.get_evaluation(), Evaluation.HIGH_CARD)
         self.assertLess(high_card_AQT92, high_card_AQJ62)
 
     def test_comparisons_when_evaluations_are_one_pair(self):
@@ -567,8 +567,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         one_pair_QQAT2 = EvaluatorOf5Cards(stack)
-        self.assertEqual(one_pair_JJAQ2.getEvaluation(), Evaluation.ONE_PAIR)
-        self.assertEqual(one_pair_QQAT2.getEvaluation(), Evaluation.ONE_PAIR)
+        self.assertEqual(one_pair_JJAQ2.get_evaluation(), Evaluation.ONE_PAIR)
+        self.assertEqual(one_pair_QQAT2.get_evaluation(), Evaluation.ONE_PAIR)
         self.assertLess(one_pair_JJAQ2, one_pair_QQAT2)
 
         # pairs are equal, high card dominates
@@ -589,8 +589,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         one_pair_JJAT2 = EvaluatorOf5Cards(stack)
-        self.assertEqual(one_pair_JJAQ2.getEvaluation(), Evaluation.ONE_PAIR)
-        self.assertEqual(one_pair_JJAT2.getEvaluation(), Evaluation.ONE_PAIR)
+        self.assertEqual(one_pair_JJAQ2.get_evaluation(), Evaluation.ONE_PAIR)
+        self.assertEqual(one_pair_JJAT2.get_evaluation(), Evaluation.ONE_PAIR)
         self.assertLess(one_pair_JJAT2, one_pair_JJAQ2)
 
     def test_comparisons_when_evaluations_are_two_pairs(self):
@@ -612,8 +612,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TWO),
         ]
         two_pairs_AA22Q = EvaluatorOf5Cards(stack)
-        self.assertEqual(two_pairs_QQJJA.getEvaluation(), Evaluation.TWO_PAIRS)
-        self.assertEqual(two_pairs_AA22Q.getEvaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_QQJJA.get_evaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_AA22Q.get_evaluation(), Evaluation.TWO_PAIRS)
         self.assertLess(two_pairs_QQJJA, two_pairs_AA22Q)
 
         # bigger pairs are equal, second pair dominates
@@ -634,8 +634,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.SIX),
         ]
         two_pairs_JJ66A = EvaluatorOf5Cards(stack)
-        self.assertEqual(two_pairs_JJTTK.getEvaluation(), Evaluation.TWO_PAIRS)
-        self.assertEqual(two_pairs_JJ66A.getEvaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_JJTTK.get_evaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_JJ66A.get_evaluation(), Evaluation.TWO_PAIRS)
         self.assertLess(two_pairs_JJ66A, two_pairs_JJTTK)
 
         # pairs are equal, high card dominates
@@ -656,8 +656,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.TEN),
         ]
         two_pairs_JJTTA = EvaluatorOf5Cards(stack)
-        self.assertEqual(two_pairs_JJTTK.getEvaluation(), Evaluation.TWO_PAIRS)
-        self.assertEqual(two_pairs_JJTTA.getEvaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_JJTTK.get_evaluation(), Evaluation.TWO_PAIRS)
+        self.assertEqual(two_pairs_JJTTA.get_evaluation(), Evaluation.TWO_PAIRS)
         self.assertLess(two_pairs_JJTTK, two_pairs_JJTTA)
 
     def test_comparisons_when_evaluations_are_three_of_a_kind(self):
@@ -679,8 +679,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.JACK),
         ]
         tripes_KKKJ6 = EvaluatorOf5Cards(stack)
-        self.assertEqual(tripes_QQQJ6.getEvaluation(), Evaluation.THREE_OF_A_KIND)
-        self.assertEqual(tripes_KKKJ6.getEvaluation(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(tripes_QQQJ6.get_evaluation(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(tripes_KKKJ6.get_evaluation(), Evaluation.THREE_OF_A_KIND)
         self.assertLess(tripes_QQQJ6, tripes_KKKJ6)
 
         # tripes are equal, high card dominates
@@ -701,8 +701,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.ACE),
         ]
         tripes_QQQA5 = EvaluatorOf5Cards(stack)
-        self.assertEqual(tripes_QQQJ6.getEvaluation(), Evaluation.THREE_OF_A_KIND)
-        self.assertEqual(tripes_QQQA5.getEvaluation(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(tripes_QQQJ6.get_evaluation(), Evaluation.THREE_OF_A_KIND)
+        self.assertEqual(tripes_QQQA5.get_evaluation(), Evaluation.THREE_OF_A_KIND)
         self.assertLess(tripes_QQQJ6, tripes_QQQA5)
 
     def test_comparisons_when_evaluations_are_full_houses(self):
@@ -724,8 +724,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.ACE),
         ]
         full_house_TTTAA = EvaluatorOf5Cards(stack)
-        self.assertEqual(full_house_QQQJJ.getEvaluation(), Evaluation.FULL_HOUSE)
-        self.assertEqual(full_house_TTTAA.getEvaluation(), Evaluation.FULL_HOUSE)
+        self.assertEqual(full_house_QQQJJ.get_evaluation(), Evaluation.FULL_HOUSE)
+        self.assertEqual(full_house_TTTAA.get_evaluation(), Evaluation.FULL_HOUSE)
         self.assertLess(full_house_TTTAA, full_house_QQQJJ)
 
         # tripes are equal, pairs dominate
@@ -746,8 +746,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.KING),
         ]
         full_house_TTTKK = EvaluatorOf5Cards(stack)
-        self.assertEqual(full_house_TTTAA.getEvaluation(), Evaluation.FULL_HOUSE)
-        self.assertEqual(full_house_TTTKK.getEvaluation(), Evaluation.FULL_HOUSE)
+        self.assertEqual(full_house_TTTAA.get_evaluation(), Evaluation.FULL_HOUSE)
+        self.assertEqual(full_house_TTTKK.get_evaluation(), Evaluation.FULL_HOUSE)
         self.assertLess(full_house_TTTKK, full_house_TTTAA)
 
     def test_comparisons_when_evaluations_are_four_of_a_kind(self):
@@ -769,8 +769,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.KING),
         ]
         quads_KKKK7 = EvaluatorOf5Cards(stack)
-        self.assertEqual(quads_QQQQJ.getEvaluation(), Evaluation.FOUR_OF_A_KIND)
-        self.assertEqual(quads_KKKK7.getEvaluation(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(quads_QQQQJ.get_evaluation(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(quads_KKKK7.get_evaluation(), Evaluation.FOUR_OF_A_KIND)
         self.assertLess(quads_QQQQJ, quads_KKKK7)
 
         # quads are equal, high card dominates
@@ -791,8 +791,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.QUEEN),
         ]
         quads_QQQQ7 = EvaluatorOf5Cards(stack)
-        self.assertEqual(quads_QQQQJ.getEvaluation(), Evaluation.FOUR_OF_A_KIND)
-        self.assertEqual(quads_QQQQ7.getEvaluation(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(quads_QQQQJ.get_evaluation(), Evaluation.FOUR_OF_A_KIND)
+        self.assertEqual(quads_QQQQ7.get_evaluation(), Evaluation.FOUR_OF_A_KIND)
         self.assertLess(quads_QQQQ7, quads_QQQQJ)
 
     def test_comparisons_when_evaluations_are_straights(self):
@@ -814,8 +814,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.ACE),
         ]
         straight_TJQKA = EvaluatorOf5Cards(stack)
-        self.assertEqual(straight_9TJQK.getEvaluation(), Evaluation.STRAIGHT)
-        self.assertEqual(straight_TJQKA.getEvaluation(), Evaluation.STRAIGHT)
+        self.assertEqual(straight_9TJQK.get_evaluation(), Evaluation.STRAIGHT)
+        self.assertEqual(straight_TJQKA.get_evaluation(), Evaluation.STRAIGHT)
         self.assertLess(straight_9TJQK, straight_TJQKA)
 
         # A2345 < 23456
@@ -836,8 +836,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.CLUB, CardNumber.ACE),
         ]
         straight_A2345 = EvaluatorOf5Cards(stack)
-        self.assertEqual(straight_23456.getEvaluation(), Evaluation.STRAIGHT)
-        self.assertEqual(straight_A2345.getEvaluation(), Evaluation.STRAIGHT)
+        self.assertEqual(straight_23456.get_evaluation(), Evaluation.STRAIGHT)
+        self.assertEqual(straight_A2345.get_evaluation(), Evaluation.STRAIGHT)
         self.assertLess(straight_A2345, straight_23456)
 
     def test_comparisons_when_evaluations_are_flush(self):
@@ -858,8 +858,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.DIAMOND, CardNumber.ACE),
         ]
         flush_A6543 = EvaluatorOf5Cards(stack)
-        self.assertEqual(flush_A6543.getEvaluation(), Evaluation.FLUSH)
-        self.assertEqual(flush_KQT92.getEvaluation(), Evaluation.FLUSH)
+        self.assertEqual(flush_A6543.get_evaluation(), Evaluation.FLUSH)
+        self.assertEqual(flush_KQT92.get_evaluation(), Evaluation.FLUSH)
         self.assertLess(flush_KQT92, flush_A6543)
 
     def test_comparisons_when_evaluations_are_straight_flush(self):
@@ -881,8 +881,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.SPADE, CardNumber.SEVEN),
         ]
         straight_flush_34567 = EvaluatorOf5Cards(stack)
-        self.assertEqual(straight_flush_9TJQK.getEvaluation(), Evaluation.STRAIGHT_FLUSH)
-        self.assertEqual(straight_flush_34567.getEvaluation(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(straight_flush_9TJQK.get_evaluation(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(straight_flush_34567.get_evaluation(), Evaluation.STRAIGHT_FLUSH)
         self.assertLess(straight_flush_34567, straight_flush_9TJQK)
 
         # A2345 < 56789
@@ -903,8 +903,8 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.SPADE, CardNumber.NINE),
         ]
         straight_flush_56789 = EvaluatorOf5Cards(stack)
-        self.assertEqual(straight_flush_A2345.getEvaluation(), Evaluation.STRAIGHT_FLUSH)
-        self.assertEqual(straight_flush_56789.getEvaluation(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(straight_flush_A2345.get_evaluation(), Evaluation.STRAIGHT_FLUSH)
+        self.assertEqual(straight_flush_56789.get_evaluation(), Evaluation.STRAIGHT_FLUSH)
         self.assertLess(straight_flush_A2345, straight_flush_56789)
 
     def test_comparisons_when_evaluations_are_royal_straight_flush(self):
@@ -926,6 +926,6 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             Card(Genre.SPADE, CardNumber.TEN),
         ]
         royal_straight_flush_spade = EvaluatorOf5Cards(stack)
-        self.assertEqual(royal_straight_flush_diamond.getEvaluation(), Evaluation.ROYAL_STRAIGHT_FLUSH)
-        self.assertEqual(royal_straight_flush_spade.getEvaluation(), Evaluation.ROYAL_STRAIGHT_FLUSH)
+        self.assertEqual(royal_straight_flush_diamond.get_evaluation(), Evaluation.ROYAL_STRAIGHT_FLUSH)
+        self.assertEqual(royal_straight_flush_spade.get_evaluation(), Evaluation.ROYAL_STRAIGHT_FLUSH)
         self.assertTrue(royal_straight_flush_diamond == royal_straight_flush_spade)
