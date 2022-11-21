@@ -14,6 +14,4 @@ class Evaluation(Enum):
     ROYAL_STRAIGHT_FLUSH = 10
 
     def __lt__(self, other):
-        if self.__class__ is other.__class__:
-            return self.value < other.value
-        return NotImplemented
+        return self.value < other.value if isinstance(other, Evaluation) else NotImplemented
