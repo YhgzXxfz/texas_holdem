@@ -15,3 +15,15 @@ class EvaluatorOf7Cards:
 
     def getOptimalHands(self) -> EvaluatorOf5Cards:
         return max(EvaluatorOf5Cards(c) for c in combinations(self.original_cards, 5))
+
+    def __lt__(self, other) -> bool:
+        if other.__class__ is not self.__class__:
+            return NotImplemented
+
+        return self.getOptimalHands() < other.getOptimalHands()
+
+    def __eq__(self, other) -> bool:
+        if other.__class__ is not self.__class__:
+            return NotImplemented
+
+        return self.getOptimalHands() == other.getOptimalHands()

@@ -85,3 +85,90 @@ class TestEvaluationOf7Cards(unittest.TestCase):
         )
         self.assertTrue(best.get_evaluation() == evaluation)
         self.assertTrue(set(optimal_hand) <= set(original_hand), msg="Best hand should be a subset of the 7 cards.")
+
+    def _provide_7_card_hands_for_comparison():
+        return (
+            (
+                "<",
+                [
+                    Card(Genre.CLUB, CardNumber.THREE),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.THREE),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.NINE),
+                    # hand
+                    Card(Genre.DIAMOND, CardNumber.NINE),
+                    Card(Genre.SPADE, CardNumber.NINE),
+                ],
+                [
+                    Card(Genre.CLUB, CardNumber.THREE),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.THREE),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.NINE),
+                    # hand
+                    Card(Genre.SPADE, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.TEN),
+                ],
+            ),
+            (
+                "=",
+                [
+                    Card(Genre.CLUB, CardNumber.THREE),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.KING),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.NINE),
+                    # hand
+                    Card(Genre.SPADE, CardNumber.FIVE),
+                    Card(Genre.SPADE, CardNumber.SIX),
+                ],
+                [
+                    Card(Genre.CLUB, CardNumber.THREE),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.KING),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.NINE),
+                    # hand
+                    Card(Genre.DIAMOND, CardNumber.EIGHT),
+                    Card(Genre.DIAMOND, CardNumber.TWO),
+                ],
+            ),
+            (
+                ">",
+                [
+                    Card(Genre.CLUB, CardNumber.THREE),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.KING),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.NINE),
+                    # hand
+                    Card(Genre.CLUB, CardNumber.FIVE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                ],
+                [
+                    Card(Genre.CLUB, CardNumber.THREE),
+                    Card(Genre.HEART, CardNumber.THREE),
+                    Card(Genre.DIAMOND, CardNumber.KING),
+                    Card(Genre.CLUB, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.NINE),
+                    # hand
+                    Card(Genre.DIAMOND, CardNumber.EIGHT),
+                    Card(Genre.DIAMOND, CardNumber.TWO),
+                ],
+            ),
+        )
+
+    @data_provider(_provide_7_card_hands_for_comparison)
+    def test_comparison(self, op: str, first_hand, second_hand):
+        # When
+        e1 = EvaluatorOf7Cards(first_hand)
+        e2 = EvaluatorOf7Cards(second_hand)
+
+        # Then
+        if op == "<":
+            self.assertTrue(e1 < e2)
+        elif op == "=":
+            self.assertTrue(e1 == e2)
+        else:
+            self.assertTrue(e1 > e2)
