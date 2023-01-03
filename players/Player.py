@@ -22,3 +22,6 @@ class Player:
 
     def __eq__(self, o: object) -> bool:
         return self.ID == o.ID
+
+    def __hash__(self) -> int:
+        return hash(self.ID)
