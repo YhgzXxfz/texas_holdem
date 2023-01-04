@@ -1,6 +1,3 @@
-import players
-
-
 class Game:
     def __init__(self):
         self.player_list = []
