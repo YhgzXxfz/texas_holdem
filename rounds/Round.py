@@ -1,10 +1,12 @@
 from functools import reduce
 from typing import List, Tuple
 
+from cards.Card import Card
 from games.Deck import Deck
-from players.Player import ActionType, Player
+from players.Player import Player
 from rounds.Pot import Pot
 from rounds.RoundName import RoundName
+from rounds.RoundResult import RoundResult
 
 
 class Round:
@@ -19,6 +21,9 @@ class Round:
         raise NotImplementedError
 
     def get_round_name(self) -> RoundName:
+        raise NotImplementedError
+
+    def settle(self) -> RoundResult:
         raise NotImplementedError
 
     def check_round_result(self) -> List[Player]:
@@ -48,6 +53,9 @@ class Round:
     def _all_players_have_taken_action(self, players: List[Player]) -> bool:
         return reduce(lambda result, p: result and p.has_taken_action, players, True)
 
+    def _provide_shared_hands(self) -> Tuple[Card]:
+        pass
+
 
 class Preflop(Round):
     def __init__(
@@ -73,3 +81,11 @@ class Preflop(Round):
 
     def get_round_name(self) -> RoundName:
         return RoundName.PREFLOP
+
+    def settle(self) -> RoundResult:
+        remaining_players = self.check_round_result()
+        if len(remaining_players) == 1:
+            self.pot.settle(remaining_players[0])
+            return RoundResult(True, remaining_players[0])
+        else:
+            return RoundResult(False, None)

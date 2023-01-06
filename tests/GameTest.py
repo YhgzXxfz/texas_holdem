@@ -238,3 +238,49 @@ class GameTest(unittest.TestCase):
         self.assertTrue(anton.money == 1_000)
         self.assertTrue(pot.is_balanced(RoundName.PREFLOP))
         self.assertTrue(preflop.check_round_result() == [phil, harry, tom])
+
+    def test_game_ends_after_preflop(self):
+        # Given
+        game = Game()
+        tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
+        anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        phil.join_game(game, position=0)
+
+        # When
+        game.start()
+
+        # Then
+        self.assertTrue(game.deck.index == 8)
+        self.assertTrue(game.pot.compute_total_sum() == 0)
+        self.assertTrue(phil.money == 149)
+        self.assertTrue(harry.money == 301)
+        self.assertTrue(tom.money == 50)
+        self.assertTrue(anton.money == 1_000)
+
+    def test_game_continues_after_preflop(self):
+        # Given
+        game = Game()
+        tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
+        anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CALL)
+        anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        phil.join_game(game, position=0)
+
+        # When
+        game.start()
+
+        # Then
+        self.assertTrue(game.deck.index == 8)
+        self.assertTrue(game.pot.compute_total_sum() == 5)
+        self.assertTrue(phil.money == 149)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(tom.money == 50)
+        self.assertTrue(anton.money == 998)

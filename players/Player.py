@@ -19,8 +19,6 @@ class ActionType(Enum):
 
 
 class Player:
-    import games.Game as gm
-
     def __init__(self, name: str, ID: str, money: int, policy: Policy = Policy.ALWAYS_CHECK_OR_FOLD):
         self.name = name
         self.money = money
@@ -30,9 +28,12 @@ class Player:
         self.has_taken_action = False
         self.policy = policy
 
-    def join_game(self, game: gm.Game, position: int):
+    def join_game(self, game, position: int) -> None:
         game.add_player(self, position)
         self.is_in_game = True
+
+    def take_from_pot(self, pot) -> None:
+        self.money += pot.compute_total_sum()
 
     def take_action(self, pot, roundname: rn.RoundName) -> None:
         if self.policy == Policy.ALWAYS_CHECK_OR_FOLD:
