@@ -484,7 +484,7 @@ class GameTest(unittest.TestCase):
         self.assertTrue(tom.money == 50)
         self.assertTrue(anton.money == 1_000)
 
-    def test_game_continues_after_preflop(self):
+    def test_game_continues_after_flop(self):
         # Given
         game = Game()
         tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CHECK_OR_FOLD)
@@ -500,7 +500,7 @@ class GameTest(unittest.TestCase):
         game.start()
 
         # Then
-        self.assertTrue(game.deck.index == 8)
+        self.assertTrue(game.deck.index == 12)
         self.assertTrue(game.pot.compute_total_sum() == 5)
         self.assertTrue(phil.money == 149)
         self.assertTrue(harry.money == 298)

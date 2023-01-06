@@ -2,7 +2,7 @@ from typing import List
 
 from games.Deck import Deck
 from rounds.Pot import Pot
-from rounds.Round import Preflop
+from rounds.Round import Flop, Preflop
 
 
 class Game:
@@ -22,7 +22,7 @@ class Game:
     def get_players_in_the_game(self) -> List:
         return [ply for (_pos, ply) in sorted(self.player_list.items())]
 
-    def start(self) -> str:
+    def start(self) -> None:
         # 1. Preflop
         #    1.1 distribute cards to players
         #    1.2 SB, BB
@@ -37,14 +37,21 @@ class Game:
         remaining_players = preflop.run()
         round_result = preflop.settle(remaining_players)
         if round_result.is_game_ended:
-            msg = f"Game ends in preflop. Winner is {round_result.winner.name}!"
-            return msg
-        else:
-            return "Game is not ended at preflop"
+            return
 
         # 2. Flop
         #    2.1 flop cards
         #    2.2 bet round
+        flop = Flop(
+            players=remaining_players,
+            deck=self.deck,
+            pot=self.pot,
+        )
+        remaining_players = flop.run()
+        round_result = flop.settle(remaining_players)
+        if round_result.is_game_ended:
+            return
+
         # 3. Turn
         #    3.1 turn card
         #    3.2 bet round

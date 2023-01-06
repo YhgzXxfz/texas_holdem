@@ -88,9 +88,9 @@ class Preflop(Round):
     def settle(self, remaining_players: List[Player]) -> RoundResult:
         if len(remaining_players) == 1:
             self.pot.settle(remaining_players[0])
-            return RoundResult(True, remaining_players[0])
+            return RoundResult(True, self.get_round_name(), remaining_players[0])
         else:
-            return RoundResult(False, None)
+            return RoundResult(False, self.get_round_name(), None)
 
 
 class Flop(Round):
@@ -108,9 +108,9 @@ class Flop(Round):
     def settle(self, remaining_players: List[Player]) -> RoundResult:
         if len(remaining_players) == 1:
             self.pot.settle(remaining_players[0])
-            return RoundResult(True, remaining_players[0])
+            return RoundResult(True, self.get_round_name(), remaining_players[0])
         else:
-            return RoundResult(False, None)
+            return RoundResult(False, self.get_round_name(), None)
 
     def _provide_shared_hands(self) -> Tuple[Card]:
         self.deck.skip_one_card()
