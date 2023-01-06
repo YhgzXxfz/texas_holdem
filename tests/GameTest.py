@@ -944,7 +944,7 @@ class GameTest(unittest.TestCase):
         self.assertTrue(tom.money == 50)
         self.assertTrue(anton.money == 1_000)
 
-    def test_game_continues_after_turn(self):
+    def test_game_goes_to_comparison_after_river_if_there_are_more_than_one_player_remained(self):
         # Given
         game = Game()
         tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CHECK_OR_FOLD)
@@ -960,7 +960,7 @@ class GameTest(unittest.TestCase):
         game.start()
 
         # Then
-        self.assertTrue(game.deck.index == 14)
+        self.assertTrue(game.deck.index == 16)
         self.assertTrue(game.pot.compute_total_sum() == 5)
         self.assertTrue(phil.money == 149)
         self.assertTrue(harry.money == 298)

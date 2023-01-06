@@ -2,7 +2,7 @@ from typing import List
 
 from games.Deck import Deck
 from rounds.Pot import Pot
-from rounds.Round import Flop, Preflop, Turn
+from rounds.Round import Flop, Preflop, River, Turn
 
 
 class Game:
@@ -68,4 +68,13 @@ class Game:
         # 4. River
         #    4.1 river hand
         #    4.2 bet round
+        river = River(
+            players=remaining_players,
+            deck=self.deck,
+            pot=self.pot,
+        )
+        remaining_players = river.run()
+        round_result = river.settle(remaining_players)
+        if round_result.is_game_ended:
+            return
         # 5. Comparison
