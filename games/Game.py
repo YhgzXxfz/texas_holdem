@@ -3,13 +3,16 @@ from typing import List
 
 class Game:
     def __init__(self):
-        self.player_list = []
+        self.player_list = {}
 
     def add_player(self, player, position: int) -> None:
-        self.player_list.insert(position, player)
+        if self.player_list.get(position) is not None:
+            raise KeyError
+
+        self.player_list[position] = player
 
     def get_players_in_the_game(self) -> List:
-        return [p for p in self.player_list]
+        return [ply for (_pos, ply) in sorted(self.player_list.items())]
 
     def start():
         # 1. Preflop

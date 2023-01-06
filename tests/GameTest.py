@@ -22,15 +22,25 @@ class GameTest(unittest.TestCase):
         phil = Player("Phil Ivey", ID=ID_generator(), money=1)
 
         # When
-        harry.join_game(game, position=1)
         tom.join_game(game, position=4)
+        harry.join_game(game, position=1)
         phil.join_game(game, position=0)
 
         # Then
         self.assertTrue(len(game.player_list) == 3)
-        self.assertTrue(game.player_list[0].name == "Phil Ivey")
-        self.assertTrue(game.player_list[1].name == "Harry Potter")
-        self.assertTrue(game.player_list[2].name == "Tom Dwan")
+        self.assertTrue(game.get_players_in_the_game() == [phil, harry, tom])
+
+    def test_cannot_sit_on_a_place_taken(self):
+        # Given
+        game = Game()
+        harry = Player("Harry Potter", ID=ID_generator(), money=3)
+        harry.join_game(game, position=1)
+
+        # When
+        phil = Player("Phil Ivey", ID=ID_generator(), money=1)
+
+        # Then
+        self.assertRaises(KeyError, phil.join_game, game, 1)
 
     def test_deck_is_initialized(self):
         # Given, When
@@ -205,14 +215,14 @@ class GameTest(unittest.TestCase):
     def test_run_preflop(self):
         # Given
         game = Game()
-        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CALL)
-        phil.join_game(game, position=0)
-        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
-        harry.join_game(game, position=1)
         tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CALL)
         tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
         anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CHECK_OR_FOLD)
         anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CALL)
+        phil.join_game(game, position=0)
 
         deck = Deck()
         pot = Pot()
