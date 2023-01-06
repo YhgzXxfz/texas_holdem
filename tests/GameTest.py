@@ -125,6 +125,27 @@ class GameTest(unittest.TestCase):
         # Then
         self.assertTrue(phil.money == 148)
         self.assertTrue(pot.is_balanced(RoundName.PREFLOP))
+        self.assertTrue(preflop.check_round_result() == [], "round is not finished.")
+
+    def test_preflop_pot_is_terminated_when_everyone_calls_and_big_blind_checks(self):
+        # Given
+        game = Game()
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150)
+        phil.join_game(game, position=0)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300)
+        harry.join_game(game, position=1)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+
+        # When
+        phil.call(pot, roundname=RoundName.PREFLOP)
+        harry.check()
+
+        # Then
+        self.assertTrue(phil.money == 148)
+        self.assertTrue(pot.is_balanced(RoundName.PREFLOP))
         self.assertTrue(preflop.check_round_result() == [phil, harry])
 
     def test_preflop_result_when_all_players_but_one_fold(self):
@@ -165,7 +186,7 @@ class GameTest(unittest.TestCase):
         # Then
         self.assertTrue(phil.money == 140)
         self.assertFalse(pot.is_balanced(RoundName.PREFLOP))
-        self.assertTrue(preflop.check_round_result() == [])
+        self.assertTrue(preflop.check_round_result() == [], "round is not finished.")
 
     def test_preflop_pot_is_balanced_when_small_blind_raises_and_big_blind_calls(self):
         # Given

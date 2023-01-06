@@ -67,8 +67,8 @@ class Preflop(Round):
 
     def _build_pot(self, small_blind: int, big_blind: int) -> None:
         self.pot.initialize_round(roundname=RoundName.PREFLOP, players=self.players)
-        self.players[0].bet(self.pot, self.get_round_name(), small_blind)
-        self.players[1].bet(self.pot, self.get_round_name(), big_blind)
+        self.players[0].bet_bind(self.pot, small_blind)
+        self.players[1].bet_bind(self.pot, big_blind)
 
     def _distribute_hands(self) -> None:
         n = len(self.players)

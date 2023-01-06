@@ -60,6 +60,10 @@ class Player:
         self._add_to_pot(pot, roundname, to_putin)
         self.has_taken_action = True
 
+    def bet_bind(self, pot, to_putin: int) -> None:
+        # Blind bet should not be considered as action
+        self._add_to_pot(pot, rn.RoundName.PREFLOP, to_putin)
+
     def _add_to_pot(self, pot, roundname: rn.RoundName, to_putin: int) -> None:
         to_putin = min(to_putin, self.money)
         self.money -= to_putin
