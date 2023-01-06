@@ -107,7 +107,7 @@ class GameTest(unittest.TestCase):
 
         deck = Deck()
         pot = Pot()
-        preflop = Preflop(players=(phil, harry), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
         phil.call(pot, roundname=RoundName.PREFLOP)
@@ -127,7 +127,7 @@ class GameTest(unittest.TestCase):
 
         deck = Deck()
         pot = Pot()
-        preflop = Preflop(players=(phil, harry), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
         phil.fold()
@@ -147,7 +147,7 @@ class GameTest(unittest.TestCase):
 
         deck = Deck()
         pot = Pot()
-        preflop = Preflop(players=(phil, harry), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
         phil.bet(pot, RoundName.PREFLOP, 9)
@@ -167,7 +167,7 @@ class GameTest(unittest.TestCase):
 
         deck = Deck()
         pot = Pot()
-        preflop = Preflop(players=(phil, harry), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
         phil.bet(pot, RoundName.PREFLOP, 9)
@@ -189,7 +189,7 @@ class GameTest(unittest.TestCase):
 
         deck = Deck()
         pot = Pot()
-        preflop = Preflop(players=(phil, harry), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
         phil.bet(pot, RoundName.PREFLOP, 9)
@@ -216,7 +216,7 @@ class GameTest(unittest.TestCase):
 
         deck = Deck()
         pot = Pot()
-        preflop = Preflop(players=(phil, harry, tom), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
         preflop.run()
