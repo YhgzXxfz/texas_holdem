@@ -34,8 +34,8 @@ class Game:
             small_blind=self.small_blind,
             big_blind=self.big_blind,
         )
-        preflop.run()
-        round_result = preflop.settle()
+        remaining_players = preflop.run()
+        round_result = preflop.settle(remaining_players)
         if round_result.is_game_ended:
             msg = f"Game ends in preflop. Winner is {round_result.winner.name}!"
             return msg

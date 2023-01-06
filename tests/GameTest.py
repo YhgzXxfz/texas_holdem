@@ -6,7 +6,7 @@ from games.Game import Game
 from players.Player import ID_generator, Player
 from players.Policy import Policy
 from rounds.Pot import Pot
-from rounds.Round import Preflop
+from rounds.Round import Flop, Preflop
 from rounds.RoundName import RoundName
 
 
@@ -14,6 +14,7 @@ class GameTest(unittest.TestCase):
     def setUp(self) -> None:
         return super().setUp()
 
+    # --------------------- Player Seats ------------------------
     def test_players_sit_in_right_place(self):
         # Given
         game = Game()
@@ -42,6 +43,7 @@ class GameTest(unittest.TestCase):
         # Then
         self.assertRaises(KeyError, phil.join_game, game, 1)
 
+    # --------------------------- Deck ----------------------------
     def test_deck_is_initialized(self):
         # Given, When
         deck = Deck()
@@ -75,6 +77,7 @@ class GameTest(unittest.TestCase):
         self.assertTrue(len(cards) == 2)
         self.assertEqual(deck.cards[5:7], list(cards))
 
+    # --------------------------- Preflop ----------------------------
     def test_initialize_preflop(self):
         # Given
         game = Game()
@@ -250,7 +253,7 @@ class GameTest(unittest.TestCase):
         preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
 
         # When
-        preflop.run()
+        result = preflop.run()
 
         # Then
         self.assertTrue(phil.money == 148)
@@ -258,8 +261,206 @@ class GameTest(unittest.TestCase):
         self.assertTrue(tom.money == 48)
         self.assertTrue(anton.money == 1_000)
         self.assertTrue(pot.is_balanced(RoundName.PREFLOP))
-        self.assertTrue(preflop.check_round_result() == [phil, harry, tom])
+        self.assertTrue(result == [phil, harry, tom])
 
+    # --------------------------- Flop ----------------------------
+    def test_initialize_flop(self):
+        # Given
+        game = Game()
+        tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CALL)
+        tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
+        anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CALL)
+        phil.join_game(game, position=0)
+
+        deck = Deck()
+        pot = Pot()
+
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        tom.call(pot, roundname=RoundName.PREFLOP)
+        anton.fold()
+        phil.fold()
+        harry.check()
+        self.assertTrue(preflop.check_round_result() == [harry, tom])
+        self.assertTrue(phil.money == 149)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(tom.money == 48)
+        self.assertTrue(anton.money == 1_000)
+
+        # When
+        flop = Flop(players=preflop.check_round_result(), deck=deck, pot=pot)
+
+        # Then
+        self.assertTrue(deck.index == 12, "Flop cards should be displayed")
+        self.assertTrue(phil.money == 149)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(tom.money == 48)
+        self.assertTrue(anton.money == 1_000)
+        self.assertTrue(pot.compute_total_sum() == 5)
+        self.assertTrue(flop.check_round_result() == [], "round has not started")
+
+    def test_flop_pot_is_unbalanced_when_one_raises(self):
+        # Given
+        game = Game()
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150)
+        phil.join_game(game, position=0)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300)
+        harry.join_game(game, position=1)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        phil.call(pot, roundname=RoundName.PREFLOP)
+        harry.check()
+
+        # When
+        flop = Flop(players=preflop.check_round_result(), deck=deck, pot=pot)
+        phil.bet(pot, RoundName.FLOP, 9)
+
+        # Then
+        self.assertTrue(phil.money == 139)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(pot.compute_total_sum() == 13)
+        self.assertFalse(pot.is_balanced(RoundName.FLOP))
+        self.assertTrue(flop.check_round_result() == [], "round is not finished.")
+
+    def test_flop_pot_is_balanced_when_everyone_calls(self):
+        # Given
+        game = Game()
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150)
+        phil.join_game(game, position=0)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300)
+        harry.join_game(game, position=1)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        phil.call(pot, roundname=RoundName.PREFLOP)
+        harry.check()
+
+        # When
+        flop = Flop(players=preflop.check_round_result(), deck=deck, pot=pot)
+        phil.bet(pot, roundname=RoundName.FLOP, to_putin=5)
+        harry.call(pot, roundname=RoundName.FLOP)
+
+        # Then
+        self.assertTrue(phil.money == 143)
+        self.assertTrue(harry.money == 293)
+        self.assertTrue(pot.compute_total_sum() == 14)
+        self.assertTrue(pot.is_balanced(RoundName.FLOP))
+        self.assertTrue(flop.check_round_result() == [phil, harry])
+
+    def test_flop_result_when_all_players_but_one_fold(self):
+        # Given
+        game = Game()
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150)
+        phil.join_game(game, position=0)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300)
+        harry.join_game(game, position=1)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        phil.call(pot, roundname=RoundName.PREFLOP)
+        harry.check()
+
+        # When
+        flop = Flop(players=preflop.check_round_result(), deck=deck, pot=pot)
+        phil.bet(pot, roundname=RoundName.FLOP, to_putin=5)
+        harry.fold()
+
+        # Then
+        self.assertTrue(phil.money == 143)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(pot.compute_total_sum() == 9)
+        self.assertFalse(pot.is_balanced(RoundName.FLOP))
+        self.assertTrue(flop.check_round_result() == [phil])
+
+    def test_flop_result_when_settled(self):
+        # Given
+        game = Game()
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150)
+        phil.join_game(game, position=0)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300)
+        harry.join_game(game, position=1)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        phil.call(pot, roundname=RoundName.PREFLOP)
+        harry.check()
+
+        # When
+        flop = Flop(players=preflop.check_round_result(), deck=deck, pot=pot)
+        phil.bet(pot, roundname=RoundName.FLOP, to_putin=5)
+        harry.fold()
+        flop.settle(flop.check_round_result())
+
+        # Then
+        self.assertTrue(phil.money == 152)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(pot.compute_total_sum() == 0)
+
+    def test_flop_pot_is_balanced_when_one_is_all_in(self):
+        # Given
+        game = Game()
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150)
+        phil.join_game(game, position=0)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300)
+        harry.join_game(game, position=1)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        phil.call(pot, roundname=RoundName.PREFLOP)
+        harry.check()
+
+        # When
+        flop = Flop(players=preflop.check_round_result(), deck=deck, pot=pot)
+        phil.bet(pot, RoundName.FLOP, 9)
+        harry.bet(pot, RoundName.FLOP, 200)
+        phil.call(pot, RoundName.FLOP)
+
+        # Then
+        self.assertTrue(phil.money == 0)
+        self.assertTrue(harry.money == 98)
+        self.assertTrue(pot.compute_total_sum() == 352)
+        self.assertTrue(pot.is_balanced(RoundName.FLOP))
+        self.assertTrue(flop.check_round_result() == [phil, harry])
+
+    def test_run_flop(self):
+        # Given
+        game = Game()
+        tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CALL)
+        tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
+        anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CALL)
+        phil.join_game(game, position=0)
+
+        deck = Deck()
+        pot = Pot()
+        preflop = Preflop(players=game.get_players_in_the_game(), deck=deck, pot=pot, small_blind=1, big_blind=2)
+        remaining_players = preflop.run()
+
+        # When
+        flop = Flop(players=remaining_players, deck=deck, pot=pot)
+        remaining_players = flop.run()
+
+        # Then
+        self.assertTrue(phil.money == 148)
+        self.assertTrue(harry.money == 298)
+        self.assertTrue(tom.money == 48)
+        self.assertTrue(anton.money == 1_000)
+        self.assertTrue(pot.is_balanced(RoundName.FLOP))
+        self.assertTrue(remaining_players == [phil, harry, tom])
+
+    # --------------------------- Game ----------------------------
     def test_game_ends_after_preflop(self):
         # Given
         game = Game()

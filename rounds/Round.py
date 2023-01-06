@@ -14,8 +14,7 @@ class Round:
         self.deck = deck
         self.players = players
         self.pot = pot
-        for p in self.players:
-            p.has_taken_action = False
+        self._get_ready_for_players()
 
     def get_starting_index(self) -> int:
         raise NotImplementedError
@@ -23,7 +22,7 @@ class Round:
     def get_round_name(self) -> RoundName:
         raise NotImplementedError
 
-    def settle(self) -> RoundResult:
+    def settle(self, remaining_players: List[Player]) -> RoundResult:
         raise NotImplementedError
 
     def check_round_result(self) -> List[Player]:
@@ -36,7 +35,7 @@ class Round:
 
         return []
 
-    def run(self) -> None:
+    def run(self) -> List[Player]:
         index = self.get_starting_index()
         while True:
             players = [p for p in self.players if p.is_in_game]
@@ -53,8 +52,12 @@ class Round:
     def _all_players_have_taken_action(self, players: List[Player]) -> bool:
         return reduce(lambda result, p: result and p.has_taken_action, players, True)
 
+    def _get_ready_for_players(self) -> None:
+        for p in self.players:
+            p.has_taken_action = False
+
     def _provide_shared_hands(self) -> Tuple[Card]:
-        pass
+        raise NotImplementedError
 
 
 class Preflop(Round):
@@ -82,10 +85,33 @@ class Preflop(Round):
     def get_round_name(self) -> RoundName:
         return RoundName.PREFLOP
 
-    def settle(self) -> RoundResult:
-        remaining_players = self.check_round_result()
+    def settle(self, remaining_players: List[Player]) -> RoundResult:
         if len(remaining_players) == 1:
             self.pot.settle(remaining_players[0])
             return RoundResult(True, remaining_players[0])
         else:
             return RoundResult(False, None)
+
+
+class Flop(Round):
+    def __init__(self, players: Tuple[Player, ...], deck: Deck, pot: Pot) -> None:
+        super().__init__(players, deck, pot)
+        self.shared_cards = self._provide_shared_hands()
+        self.pot.initialize_round(roundname=RoundName.FLOP, players=self.players)
+
+    def get_starting_index(self) -> int:
+        return 0
+
+    def get_round_name(self) -> RoundName:
+        return RoundName.FLOP
+
+    def settle(self, remaining_players: List[Player]) -> RoundResult:
+        if len(remaining_players) == 1:
+            self.pot.settle(remaining_players[0])
+            return RoundResult(True, remaining_players[0])
+        else:
+            return RoundResult(False, None)
+
+    def _provide_shared_hands(self) -> Tuple[Card]:
+        self.deck.skip_one_card()
+        return self.deck.pop_cards(3)
