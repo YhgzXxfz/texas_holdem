@@ -77,4 +77,3 @@ class Game:
         round_result = river.settle(remaining_players)
         if round_result.is_game_ended:
             return
-        # 5. Comparison
