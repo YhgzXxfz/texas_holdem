@@ -27,7 +27,6 @@ class PreflopRoundTest(unittest.TestCase):
             big_blind=2,
         )
 
-    # --------------------------- Preflop ----------------------------
     def test_initialize_preflop(self):
         # Then
         # hands are distributed correctly
