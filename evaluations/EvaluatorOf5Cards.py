@@ -2,7 +2,6 @@ from collections import Counter
 from typing import List
 
 from cards.Card import Card
-
 from evaluations.Comparisons import sort_by_number_lt, sort_by_occurence_lt, straight_lt
 from evaluations.Evaluation import Evaluation
 
@@ -111,3 +110,7 @@ class EvaluatorOf5Cards:
 
     def __eq__(self, o: object) -> bool:
         return not self < o and not o < self
+
+    def __hash__(self) -> int:
+        # Suit does not matter in comparison
+        return sum(hash(c.number) for c in sorted(self.original_cards, key=lambda card: card))

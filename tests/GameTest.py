@@ -1,6 +1,7 @@
 import unittest
 
 from cards.Card import Card, CardNumber, Genre
+from evaluations.Evaluation import Evaluation
 from games.Deck import Deck
 from games.Game import Game
 from players.Player import ID_generator, Player
@@ -120,3 +121,99 @@ class GameTest(unittest.TestCase):
         self.assertTrue(harry.money == 298)
         self.assertTrue(tom.money == 50)
         self.assertTrue(anton.money == 998)
+
+    def test_showdown_with_distinct_optimal_hands(self):
+        # Given
+        game = Game()
+        tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
+        anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CALL)
+        anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        phil.join_game(game, position=0)
+
+        phil.pocket_cards = (
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+        )
+        harry.pocket_cards = (
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        )
+        tom.pocket_cards = (
+            Card(Genre.SPADE, CardNumber.SEVEN),
+            Card(Genre.SPADE, CardNumber.EIGHT),
+        )
+        anton.pocket_cards = (
+            Card(Genre.CLUB, CardNumber.THREE),
+            Card(Genre.CLUB, CardNumber.FOUR),
+        )
+
+        community_cards = [
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.FIVE),
+        ]
+
+        # When
+        evaluation_order = game.showdown(community_cards, [phil, harry, tom, anton])
+
+        # Then
+        self.assertTrue(len(evaluation_order) == 4)
+        self.assertTrue(
+            [eva.get_evaluation() for eva in evaluation_order.keys()]
+            == [Evaluation.FLUSH, Evaluation.STRAIGHT, Evaluation.THREE_OF_A_KIND, Evaluation.TWO_PAIRS]
+        )
+        self.assertTrue(list(evaluation_order.values()) == [[tom], [anton], [phil], [harry]])
+
+    def test_showdown_with_same_optimal_hands(self):
+        # Given
+        game = Game()
+        tom = Player("Tom Dwan", ID=ID_generator(), money=50, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        tom.join_game(game, position=3)
+        harry = Player("Harry Potter", ID=ID_generator(), money=300, policy=Policy.ALWAYS_CALL)
+        harry.join_game(game, position=1)
+        anton = Player("Anton Dom", ID=ID_generator(), money=1000, policy=Policy.ALWAYS_CALL)
+        anton.join_game(game, position=4)
+        phil = Player("Phil Ivey", ID=ID_generator(), money=150, policy=Policy.ALWAYS_CHECK_OR_FOLD)
+        phil.join_game(game, position=0)
+
+        phil.pocket_cards = (
+            Card(Genre.DIAMOND, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.QUEEN),
+        )
+        harry.pocket_cards = (
+            Card(Genre.HEART, CardNumber.QUEEN),
+            Card(Genre.CLUB, CardNumber.JACK),
+        )
+        tom.pocket_cards = (
+            Card(Genre.HEART, CardNumber.THREE),
+            Card(Genre.HEART, CardNumber.FOUR),
+        )
+        anton.pocket_cards = (
+            Card(Genre.CLUB, CardNumber.THREE),
+            Card(Genre.CLUB, CardNumber.FOUR),
+        )
+
+        community_cards = [
+            Card(Genre.SPADE, CardNumber.QUEEN),
+            Card(Genre.SPADE, CardNumber.TWO),
+            Card(Genre.DIAMOND, CardNumber.JACK),
+            Card(Genre.HEART, CardNumber.ACE),
+            Card(Genre.SPADE, CardNumber.FIVE),
+        ]
+
+        # When
+        evaluation_order = game.showdown(community_cards, [phil, harry, tom, anton])
+
+        # Then
+        self.assertTrue(len(evaluation_order) == 3)
+        self.assertTrue(
+            [eva.get_evaluation() for eva in evaluation_order.keys()]
+            == [Evaluation.STRAIGHT, Evaluation.THREE_OF_A_KIND, Evaluation.TWO_PAIRS]
+        )
+        self.assertTrue(list(evaluation_order.values()) == [[tom, anton], [phil], [harry]])

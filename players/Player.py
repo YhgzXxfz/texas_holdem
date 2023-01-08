@@ -23,7 +23,7 @@ class Player:
         self.name = name
         self.money = money
         self.ID = ID
-        self.hands = ()
+        self.pocket_cards = ()
         self.is_in_game = False
         self.has_taken_action = False
         self.policy = policy

@@ -2,7 +2,6 @@ from itertools import combinations
 from typing import List
 
 from cards.Card import Card
-
 from evaluations.EvaluatorOf5Cards import EvaluatorOf5Cards
 
 NUMBER_OF_CARDS = 7

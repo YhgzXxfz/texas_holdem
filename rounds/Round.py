@@ -75,9 +75,9 @@ class Preflop(Round):
 
     def _distribute_hands(self) -> None:
         n = len(self.players)
-        hands = list(self.deck.pop_cards(2 * n))
-        for (p, h) in zip(self.players, zip(hands[0:n], hands[n:])):
-            p.hands = h
+        cards = list(self.deck.pop_cards(2 * n))
+        for (p, h) in zip(self.players, zip(cards[0:n], cards[n:])):
+            p.pocket_cards = h
 
     def get_starting_index(self) -> int:
         return 2
@@ -96,7 +96,7 @@ class Preflop(Round):
 class Flop(Round):
     def __init__(self, players: Tuple[Player, ...], deck: Deck, pot: Pot) -> None:
         super().__init__(players, deck, pot)
-        self.shared_cards = self._provide_shared_hands()
+        self.community_cards = self._provide_community_hands()
         self.pot.initialize_round(roundname=RoundName.FLOP, players=self.players)
 
     def get_starting_index(self) -> int:
@@ -112,7 +112,7 @@ class Flop(Round):
         else:
             return RoundResult(False, self.get_round_name(), None)
 
-    def _provide_shared_hands(self) -> Tuple[Card]:
+    def _provide_community_hands(self) -> Tuple[Card]:
         self.deck.skip_one_card()
         return self.deck.pop_cards(3)
 
@@ -120,7 +120,7 @@ class Flop(Round):
 class Turn(Round):
     def __init__(self, players: Tuple[Player, ...], deck: Deck, pot: Pot) -> None:
         super().__init__(players, deck, pot)
-        self.shared_cards = self._provide_shared_hands()
+        self.community_cards = self._provide_community_hands()
         self.pot.initialize_round(roundname=RoundName.TURN, players=self.players)
 
     def get_starting_index(self) -> int:
@@ -136,7 +136,7 @@ class Turn(Round):
         else:
             return RoundResult(False, self.get_round_name(), None)
 
-    def _provide_shared_hands(self) -> Tuple[Card]:
+    def _provide_community_hands(self) -> Tuple[Card]:
         self.deck.skip_one_card()
         return self.deck.pop_cards(1)
 
@@ -144,7 +144,7 @@ class Turn(Round):
 class River(Round):
     def __init__(self, players: Tuple[Player, ...], deck: Deck, pot: Pot) -> None:
         super().__init__(players, deck, pot)
-        self.shared_cards = self._provide_shared_hands()
+        self.community_cards = self._provide_community_hands()
         self.pot.initialize_round(roundname=RoundName.RIVER, players=self.players)
 
     def get_starting_index(self) -> int:
@@ -160,6 +160,6 @@ class River(Round):
         else:
             return RoundResult(False, self.get_round_name(), None)
 
-    def _provide_shared_hands(self) -> Tuple[Card]:
+    def _provide_community_hands(self) -> Tuple[Card]:
         self.deck.skip_one_card()
         return self.deck.pop_cards(1)

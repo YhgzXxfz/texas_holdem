@@ -1,10 +1,11 @@
 import unittest
 from typing import List
 
+from unittest_data_provider import data_provider
+
 from cards.Card import Card, CardNumber, Genre
 from evaluations.Evaluation import Evaluation
 from evaluations.EvaluatorOf5Cards import EvaluatorOf5Cards
-from unittest_data_provider import data_provider
 
 
 class TestEvaluationOf5Cards(unittest.TestCase):
@@ -875,3 +876,64 @@ class TestEvaluationOf5Cards(unittest.TestCase):
             self.assertTrue(e1 == e2, "royal straight flush are all equal.")
         else:
             self.assertTrue(e1 < e2)
+
+    @data_provider(
+        lambda: (
+            (
+                [
+                    Card(Genre.SPADE, CardNumber.QUEEN),
+                    Card(Genre.SPADE, CardNumber.TWO),
+                    Card(Genre.DIAMOND, CardNumber.JACK),
+                    Card(Genre.HEART, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                ],
+                [
+                    Card(Genre.DIAMOND, CardNumber.QUEEN),
+                    Card(Genre.SPADE, CardNumber.TWO),
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.HEART, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                ],
+                True,  # Same number, different suits
+            ),
+            (
+                [
+                    Card(Genre.DIAMOND, CardNumber.QUEEN),
+                    Card(Genre.SPADE, CardNumber.TWO),
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.HEART, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                ],
+                [
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.DIAMOND, CardNumber.QUEEN),
+                    Card(Genre.HEART, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                    Card(Genre.SPADE, CardNumber.TWO),
+                ],
+                True,  # Order does not matter
+            ),
+            (
+                [
+                    Card(Genre.DIAMOND, CardNumber.QUEEN),
+                    Card(Genre.SPADE, CardNumber.TWO),
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.HEART, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                ],
+                [
+                    Card(Genre.DIAMOND, CardNumber.QUEEN),
+                    Card(Genre.SPADE, CardNumber.THREE),
+                    Card(Genre.CLUB, CardNumber.JACK),
+                    Card(Genre.HEART, CardNumber.ACE),
+                    Card(Genre.CLUB, CardNumber.SIX),
+                ],
+                False,
+            ),
+        )
+    )
+    def test_hashes(self, hand_1: List[Card], hand_2: List[Card], are_equal: bool) -> None:
+        e1 = EvaluatorOf5Cards(hand_1)
+        e2 = EvaluatorOf5Cards(hand_2)
+
+        self.assertEqual(e1.__hash__() == e2.__hash__(), are_equal)

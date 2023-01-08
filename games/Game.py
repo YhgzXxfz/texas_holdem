@@ -1,5 +1,10 @@
-from typing import List
+from collections import OrderedDict
+from functools import reduce
+from typing import List, OrderedDict
 
+from cards.Card import Card
+from evaluations.EvaluatorOf5Cards import EvaluatorOf5Cards
+from evaluations.EvaluatorOf7Cards import EvaluatorOf7Cards
 from games.Deck import Deck
 from rounds.Pot import Pot
 from rounds.Round import Flop, Preflop, River, Turn
@@ -77,3 +82,28 @@ class Game:
         round_result = river.settle(remaining_players)
         if round_result.is_game_ended:
             return
+
+        # Showdown
+        _player_to_evaluation = self.showdown(
+            reduce(
+                lambda acc, it: acc + it,
+                map(list, (flop.community_cards, turn.community_cards, river.community_cards)),
+                [],
+            ),
+            remaining_players,
+        )
+
+    def showdown(self, community_cards: List[Card], remaining_players: List) -> OrderedDict[EvaluatorOf5Cards, List]:
+        result: OrderedDict[EvaluatorOf5Cards, List] = OrderedDict()
+        player_to_evaluation = [
+            (player, EvaluatorOf7Cards(community_cards + list(player.pocket_cards)).getOptimalHands())
+            for player in remaining_players
+        ]
+        for player, eva in player_to_evaluation:
+            if eva in result:
+                result[eva].append(player)
+            else:
+                result[eva] = [player]
+
+        result = OrderedDict(sorted(result.items(), key=lambda pair: pair[0], reverse=True))
+        return result
