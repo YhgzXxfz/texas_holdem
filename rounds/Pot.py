@@ -27,6 +27,9 @@ class Pot:
         winner.take_from_pot(self)
         self._clear()
 
+    def get_chips_for(self, player: ply.Player) -> None:
+        return sum([d[player] if player in d else 0 for _r, d in self.roundpots.items()])
+
     def _is_balanced(self, roundpot: Dict[ply.Player, int]) -> bool:
         count, chip = 0, max(roundpot.values())
         for (p, m) in roundpot.items():
